@@ -1,0 +1,105 @@
+# Default configuration for Static Code Analysis project
+
+# Analysis settings
+analysis:
+  max_file_size: 1000000  # Maximum file size to analyze (bytes)
+  supported_extensions: [".py"]
+  timeout_seconds: 30
+  max_files_per_directory: 1000
+
+# Model settings
+models:
+  vulnerability_detector:
+    model_type: "gradient_boosting"  # Options: gradient_boosting, random_forest, logistic_regression, neural_network
+    config:
+      n_estimators: 100
+      learning_rate: 0.1
+      max_depth: 6
+      random_state: 42
+  
+  vulnerability_ranker:
+    model_type: "gradient_boosting"
+    config:
+      n_estimators: 50
+      learning_rate: 0.05
+      max_depth: 4
+
+# Feature extraction settings
+features:
+  ast_features: true
+  text_features: true
+  complexity_metrics: true
+  tfidf_max_features: 1000
+  tfidf_ngram_range: [1, 3]
+
+# Evaluation settings
+evaluation:
+  test_split: 0.2
+  validation_split: 0.15
+  cv_folds: 5
+  random_state: 42
+  metrics:
+    - "accuracy"
+    - "precision_macro"
+    - "recall_macro"
+    - "f1_macro"
+    - "auc"
+    - "precision@k"
+  
+  precision_at_k_values: [1, 5, 10, 20]
+  target_tpr: 0.95
+
+# Dataset generation settings
+dataset:
+  num_vulnerable_samples: 200
+  num_safe_samples: 300
+  split_ratios: [0.7, 0.15, 0.15]
+  random_seed: 42
+
+# Visualization settings
+visualization:
+  figure_size: [12, 8]
+  dpi: 300
+  style: "seaborn-v0_8"
+  color_palette: "husl"
+
+# Logging settings
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/analysis.log"
+
+# Security settings
+security:
+  pii_detection: true
+  redact_patterns:
+    - r'\b\d{3}-\d{2}-\d{4}\b'  # SSN
+    - r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'  # Email
+    - r'\b(?:\d{1,3}\.){3}\d{1,3}\b'  # IP address
+  
+  audit_logging: true
+  max_log_size: 10485760  # 10MB
+  backup_count: 5
+
+# Demo settings
+demo:
+  streamlit:
+    port: 8501
+    host: "localhost"
+    theme: "light"
+  
+  max_file_size_mb: 10
+  supported_formats: [".py", ".txt"]
+  
+  display_settings:
+    max_vulnerabilities_shown: 100
+    show_confidence_scores: true
+    show_feature_importance: true
+
+# Device settings
+device:
+  preferred_device: "auto"  # Options: auto, cpu, cuda, mps
+  fallback_to_cpu: true
+
+# Random seed for reproducibility
+random_seed: 42
